@@ -7,7 +7,7 @@ class apple:
     def __init__(self, surface):
         self.parent_screen = surface
         apple = pygame.image.load('pythonsnakegameapple.png')
-        self.s_apple = pygame.transform.scale(apple, (50, 50))
+        self.s_apple = pygame.transform.scale(apple, (45, 45))
         
         self.b_x = random.randint(0, 20)*45
         self.b_y = random.randint(0, 20)*45
@@ -24,11 +24,11 @@ class snake:
         self.length = length
         self.parent_screen = surface
         block = pygame.image.load('snakeblock.png')
-        self.smallerblock = pygame.transform.scale(block, (45, 45))
+        self.smallerblock = pygame.transform.scale(block, (40, 40))
         self.block_x = [SIZE]*length
         self.block_y = [SIZE]*length
         self.direction = 'down'
-           #initializes an empty set
+           
 
     def draw(self):
         self.parent_screen.fill((53, 94, 59))
@@ -98,7 +98,7 @@ class Game:
             self.snake.inc_length()
         # Check for collisions with itself   
         for i in range(2, self.snake.length):
-            if self.is_collision(self.snake.block_x[0], self.snake.block_y[0], self.snake.block_x[i], self.snake.block_x[i]):
+            if self.is_collision(self.snake.block_x[0], self.snake.block_y[0], self.snake.block_x[i], self.snake.block_y[i]):
                 raise "game over"   
         # Check for collisions with walls 
         if (
