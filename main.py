@@ -79,8 +79,10 @@ class Game:
         self.apple = apple(self.surface)
         self.apple.apple_draw()
         self.clock = pygame.time.Clock()
-        self.game_over = False
-
+        self.running = True
+ 
+        
+             
     def display_score(self):
         font = pygame.font.SysFont('arial', 25, bold=False, italic=False)
         score = font.render(f"score: {self.snake.length-1}", True, (250, 250, 250))
@@ -108,7 +110,7 @@ class Game:
             or self.snake.block_y[0] >= 1000                 
         ):
             print("hit a wall")
-            self.game_over = True
+            self.running = False
         
     def is_collision(self, x1, y1, x2, y2):
         x1_min, x1_max = x1, x1 + SIZE
@@ -122,15 +124,39 @@ class Game:
         return False
     
     def gameover(self):
-        font = pygame.font.SysFont('arial', 70, bold=False, italic=False)
-        game_over_text = font.render('Game Over', True, (250, 0, 0))            
+        self.font = pygame.font.SysFont('arial', 70, bold=False, italic=False)
+        game_over_text = self.font.render('Game Over', True, (250, 0, 0))            
         self.surface.blit(game_over_text, (300, 300))
+        pygame.display.update()
+        pygame.time.wait(2000)
+        waiting = True
+        self.surface.fill((0, 0, 0))
+        self.replay_game_text = self.font.render('Press ENTER to play again', True, (250, 0, 0))    
+        self.finish_game_text = self.font.render('Press SPACE to quit', True, (250, 0, 0))            
+        self.surface.blit(self.replay_game_text, (100, 200))
+        self.surface.blit(self.finish_game_text, (100, 400))
         pygame.display.flip()
-        pygame.time.wait(2000)                 
-        self.running = False
+        while waiting == True:
+            for event in pygame.event.get():
+                if event.type == KEYDOWN and event.key == K_RETURN:
+                    if __name__ == '__main__':
+                        game = Game()
+                        game.run()
+                        pygame.display.flip() 
+                if event.type == KEYDOWN and event.key == K_SPACE:
+                    self.running = False
+                    waiting = False
+            
+       
+        
+
+        
+            
+    
+  
    
     def run(self):
-        self.running = True
+        
         pause = False
         while self.running == True:
             for event in pygame.event.get():
@@ -147,9 +173,8 @@ class Game:
                             self.snake.direction = 'left'
                         if event.key == K_RIGHT:
                             self.snake.direction = 'right'
-                    elif event.type == QUIT:
-                    
-                        self.running = False
+                if event.type == QUIT:
+                    self.running = False
              
                 
             try:
@@ -157,6 +182,7 @@ class Game:
                     self.play()
             except Exception as e:
                 self.gameover()
+                
                 pause = True
             
                 
@@ -172,8 +198,9 @@ class Game:
                 
             
             
-            if self.game_over == True:
+            if self.running == False:
                 self.gameover()
+                
                 
             self.clock.tick(4)
 
